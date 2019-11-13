@@ -7,7 +7,7 @@
         <img src="../../assets/img/logo_index.png" alt="">
       </div>
       <!-- 表单 -->
-      <el-form style="margin-top:30px" :model="loginForm" :rules="loginRules">
+      <el-form ref="fromObj" style="margin-top:30px" :model="loginFrom" :rules="loginRules">
         <!-- 一个表单域就是一个form-item -->
         <el-form-item prop='mobile'>
           <!-- 放置表单组件  -->
@@ -24,7 +24,7 @@
            <el-checkbox v-model="loginFrom.checked">我已阅读并同意用户协议及条款</el-checkbox>
          </el-form-item>
          <el-form-item>
-           <el-button style="width:100%" type='primary'>登录</el-button>
+           <el-button style="width:100%" type='primary' @click='login'>登录</el-button>
          </el-form-item>
       </el-form>
     </el-card>
@@ -40,7 +40,40 @@ export default {
         code: '',
         checked: true
       },
-      loginRules: {}
+      // 校验规则对象,名字随便你
+      loginRules: {
+        // 键值对,key要校验的字段名,vlaue数组,数组里边方对象,一条对象一条规则,可以放多条规则
+        mobile: [
+          // required为必填字段  错误提示信息
+          { required: true, message: '请输入正确的手机号' },
+          { pattern: /^1[3456789]\d{9}$/, message: '输入的手机号不正确' }
+        ],
+        code: [
+          { required: true, message: '请输入正确的密码' },
+          { pattern: /^\d{6}$/, message: '输入的密码不正确' }
+        ],
+        checked: [
+          // 表单验证自定义规则  是一个函数,有三个参数 rule代表当前的规则,value代表当前的值,callback回调函数
+          { validator: function (rule, value, callback) {
+            if (value) {
+              callback()
+            } else {
+              callback(new Error('请您勾选用户协议'))
+            }
+          } }
+        ]
+      }
+    }
+  },
+  methods: {
+    login () {
+      // this.$refs.fromObj 获取el-from的对象实例
+      this.$refs.fromObj.validate(function (isOK) {
+        if (isOK) {
+          // 如果结果为true, 继续下一步, 调用接口, 登录
+          console.log('验证成功')
+        }
+      })
     }
   }
 }
