@@ -68,10 +68,18 @@ export default {
   methods: {
     login () {
       // this.$refs.fromObj 获取el-from的对象实例
-      this.$refs.fromObj.validate(function (isOK) {
+      this.$refs.fromObj.validate((isOK) => {
         if (isOK) {
           // 如果结果为true, 继续下一步, 调用接口, 登录
-          console.log('验证成功')
+          // console.log('验证成功')
+          this.$axios({
+            url: '/authorizations',
+            data: this.loginFrom,
+            method: 'post'
+          }).then(result => {
+            // console.log(result.data)
+            window.localStorage.setItem('user-token', result.data.data.token)
+          })
         }
       })
     }
