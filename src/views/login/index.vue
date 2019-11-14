@@ -79,6 +79,13 @@ export default {
           }).then(result => {
             // console.log(result.data)
             window.localStorage.setItem('user-token', result.data.data.token)
+            // 编程时导航
+            this.$router.push('/home')
+          }).catch(() => {
+            this.$message({
+              message: '请输入正确的手机号或者验证码',
+              type: 'success'
+            })
           })
         }
       })
