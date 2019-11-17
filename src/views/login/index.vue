@@ -68,6 +68,9 @@ export default {
   methods: {
     login () {
       // this.$refs.fromObj 获取el-from的对象实例
+      //  el-form 组件有个方法叫 validate，用于手动触发校验
+      //  如何调用到这个组件的 validate 方法？
+      //  我们可以通过 ref 来获取这个组件本身，然后就可以调用它的这个 validate 方法了
       this.$refs.fromObj.validate((isOK) => {
         if (isOK) {
           // 如果结果为true, 继续下一步, 调用接口, 登录
@@ -80,7 +83,7 @@ export default {
             // console.log(result.data)
             window.localStorage.setItem('user-token', result.data.data.token)
             // 编程时导航
-            this.$router.push('/home')
+            this.$router.push('/')
           }).catch(() => {
             this.$message({
               message: '请输入正确的手机号或者验证码',
